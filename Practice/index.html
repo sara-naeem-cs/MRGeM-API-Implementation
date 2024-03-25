@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>My Website Title</title>
+</head>
+
+<body>
+    <h1>API Integration</h1>
+    <input type="text" id="inputInfo" placeholder="Enter Info Here">
+    <button id="submitBtn">Submit</button>
+    <div id="responseData"></div>
+
+    <!--Works once project is running-->
+    <!--Make sure two unreal engine windows are not open!!-->
+
+    <script>
+        const submitBtn = document.getElementById('submitBtn');
+        const inputInfo = document.getElementById('inputInfo');
+        const inputInfoVal = "";
+        const apiURL = 'http://localhost:30010/remote/preset/Practice_Remote_Preset/function/Change Text';
+
+        submitBtn.addEventListener('click', function () {
+            //Get value from the text box
+            const inputInfoVal = inputInfo.value; //This will be the gene info submitted by the user. 
+            //alert("Value entered " + inputInfoVal)
+
+            //Define Parameters
+            const params = {
+                "Parameters": {
+                    "Text": inputInfoVal
+                },
+                "GenerateTransaction": true
+            }
+
+            fetch(apiURL, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json' //may not be necessary
+                },
+                body: JSON.stringify(params)
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error("Help there was an error with the response!!");
+                }
+                return response.json();
+            }).then(data => {
+                console.log(data)
+            })
+
+        });
+
+
+
+
+
+
+
+        /*function sendInfo(){
+            const inputVal = document.getElementById('inputInfo').value;
+            const info = {input: inputInfo} //creates object info which is input:info
+            var sendGene = inputVal
+        }*/
+
+
+
+
+
+    </script>
+</body>
+
+
+</html>
