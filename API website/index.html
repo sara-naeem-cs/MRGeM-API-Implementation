@@ -11,6 +11,24 @@
     <button id="submitBtn">Submit</button>
     <div id="responseData"></div>
 
+
+    <form id="myForm">
+        <label><input type="checkbox" name="Tissue" checked> Tissue</label>
+        <label><input type="checkbox" name="Focus Chromosome" checked> Focus Chromosome</label>
+        <label><input type="checkbox" name="Focus Gene" checked> Focus Gene</label>
+        <label><input type="checkbox" name="Min Age" checked> Min Age</label>
+        <label><input type="checkbox" name="Max Age" checked> Max Age</label>
+        <label><input type="checkbox" name="Min Mutation" checked> Min Mutation</label>
+        <label><input type="checkbox" name="Max Mutation" checked> Max Mutation</label>
+        
+        <label>Min Age: <input type="number" name="minAge" value="1"></label>
+        <label>Max Age: <input type="number" name="maxAge" value="1"></label>
+        <label>Min Mutation: <input type="number" name="minMutation" value="1"></label>
+        <label>Max Mutation: <input type="number" name="maxMutation" value="1"></label>
+        
+        <input type="submit" value="Submit">
+    </form>
+
     <!--Works once project is running-->
     <!--Make sure two unreal engine windows are not open!!-->
 
@@ -50,7 +68,68 @@
 
         });
 
+    document.getElementById('myForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        var tissue = document.querySelector('input[name="Tissue"]').checked;
+        var focusChromosome = document.querySelector('input[name="Focus Chromosome"]').checked;
+        var focusGene = document.querySelector('input[name="Focus Gene"]').checked;
+        var minAgeCheckbox = document.querySelector('input[name="Min Age"]').checked;
+        var maxAgeCheckbox = document.querySelector('input[name="Max Age"]').checked;
+        var minMutationCheckbox = document.querySelector('input[name="Min Mutation"]').checked;
+        var maxMutationCheckbox = document.querySelector('input[name="Max Mutation"]').checked;
+        var minAge = parseFloat(document.querySelector('input[name="minAge"]').value);
+        var maxAge = parseFloat(document.querySelector('input[name="maxAge"]').value);
+        var minMutation = parseFloat(document.querySelector('input[name="minMutation"]').value);
+        var maxMutation = parseFloat(document.querySelector('input[name="maxMutation"]').value);
 
+        console.log("Tissue:", tissue);
+        console.log("Focus Chromosome:", focusChromosome);
+        console.log("Focus Gene:", focusGene);
+        console.log("Min Age Checkbox:", minAgeCheckbox);
+        console.log("Max Age Checkbox:", maxAgeCheckbox);
+        console.log("Min Mutation Checkbox:", minMutationCheckbox);
+        console.log("Max Mutation Checkbox:", maxMutationCheckbox);
+        console.log("Min Age:", minAge);
+        console.log("Max Age:", maxAge);
+        console.log("Min Mutation:", minMutation);
+        console.log("Max Mutation:", maxMutation);
+
+        const menuApiURL = 'http://localhost:30010/remote/preset/Practice_Remote_Preset/function/Update Menu (MENU)';
+
+        const params = {
+                "Parameters": {
+                    "minAgeCheckbox": minAgeCheckbox,
+                    "maxAgeCheckbox": maxAgeCheckbox,
+                    "minMutationCheckbox": minMutationCheckbox,
+                    "maxMutationCheckbox": maxMutationCheckbox,
+                    "tissue": tissue,
+                    "focusChromosone": focusChromosome,
+                    "focusGene": focusGene,
+                    "minAge": minAge,
+                    "maxAge": maxAge,
+                    "minMutation": minMutation,
+                    "maxMutation": maxMutation
+                },
+                "GenerateTransaction": true
+            }
+
+            fetch(menuApiURL, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json' //may not be necessary
+                },
+                body: JSON.stringify(params)
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error("Help there was an error with the response!!");
+                }
+                return response.json();
+            }).then(data => {
+                console.log(data)
+            })
+
+});
 
 
 
